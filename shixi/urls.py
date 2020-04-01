@@ -16,8 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from user import urls as user_urls
 from django.conf.urls import url,include
-
+from rest_framework.documentation import  include_docs_urls
 urlpatterns = [
-    url(r'admin/', admin.site.urls),
-    url(r'user/' , include(user_urls,namespace='user'))
+    url(r'^admin/', admin.site.urls),
+    url(r'^user/' , include(user_urls,namespace='user')),
+    url(r'^docs/', include_docs_urls(title="my api site"))
 ]
