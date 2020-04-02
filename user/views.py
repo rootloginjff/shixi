@@ -7,14 +7,14 @@ from .DRF.user_serializers import passwordLoginSerializer
 from .DRF.user_serializers import phonecoderegiestSerializer
 from .DRF.user_serializers import phonecodeLoginSerializer
 from .DRF.user_serializers import phonesendcodeLoginSerializer
-from .common import user_is_exit, create_Token, check_user_password, check_user_status
+from .common import user_is_exit, create_Token, check_user_password, check_user_status,create_random_code,check_user_code,send_code
 from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView
 from .models import User
 
 from django.views.generic import View
 from rest_framework import exceptions
-from django.conf import settings
+
 @api_view(['GET'])
 def index(request):
     Token = request.META.get('HTTP_TOKEN')
@@ -114,27 +114,4 @@ class phonesendcodeApiView(APIView):
             return message_response(20007,"短信发送成功",{"messages":messages})
         else:
             return message_response(20007, "短信发送失败", {"messages": messages})
-
-import random
-from .alidayu import send_login_code
-def create_random_code():
-    random_number = random.randint(1000,9999)
-    return random_number
-
-def send_code(phone):
-    code = create_random_code()
-    if settings.ALIDAYU_ISOPEN:
-        messages = send_login_code(phone, 'login', code)
-        return str(messages, encoding='utf-8'), code
-    else:
-        messages = '{"Message":"OK","RequestId":"207D8ABE-6666-4532-8AF0-D7EFC51382E2","BizId":"796811885785891254^0","Code":"OK"}'
-        print("code:",code)
-        return messages, code
-def check_user_code(user_obj,code):
-    true_code = cache.get(user_obj.phone,None)
-    if str(true_code) == str(code):
-        return True
-    else:
-        return False
-
 
