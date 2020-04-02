@@ -17,11 +17,13 @@ def check_user_status(user_obj):
     else:
         return False
 
-def chect_user_password(user_obj,password):
+
+def check_user_password(user_obj, password):
     if user_obj.password == password:
         return True
     else:
         return False
+
 
 def create_Token(user_obj):
     import hashlib,time
